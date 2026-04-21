@@ -1,0 +1,16 @@
+on:
+  push:
+    tags:
+      - "v*.*.*"
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: rm -rf k8s/secret.yaml
+      - run: |
+          mkdir -p ~/.kube
+          echo "${{secrets.KUBECONFIG}}" > ~/.kube/config
+      - run: kubectl get nodes
+      - run: kubectl apply -f k8s/   
+      - uses: softprops/action-gh-release@v3

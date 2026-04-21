@@ -1,0 +1,15 @@
+name: Integration
+on:
+  push:
+    branches:
+      - "**"
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: curl -sfL https://get.k3s.io | sh -
+      - run: mkdir -p ~/.kube && sudo k3s kubectl config view --raw > ~/.kube/config && chmod 600 ~/.kube/config
+      - run: kubectl wait node --for=condition=Ready --all --timeout=60s
+      - run: kubectl apply -f k8s/
+      - run: kubectl rollout status statefulset/db --timeout=120s
