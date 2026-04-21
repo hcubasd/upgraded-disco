@@ -13,3 +13,4 @@ jobs:
           echo "${{secrets.KUBECONFIG}}" > ~/.kube/config
       - run: kubectl get nodes
       - run: kubectl apply -f k8s/   
+      - uses: softprops/action-gh-release@v3
