@@ -4,7 +4,7 @@ on:
     branches:
       - "**"
 jobs:
-  integration:
+  integrate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -13,3 +13,4 @@ jobs:
       - run: kubectl wait node --for=condition=Ready --all --timeout=60s
       - run: kubectl apply -f k8s/
       - run: kubectl rollout status statefulset/db --timeout=120s
+      - run: kubectl wait job/migrations --for=condition=complete --timeout=120s   

@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrations
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: wait-for-db
+          image: postgres:18
+          command: ['sh', '-c', 'until pg_isready -h db -p 5432; do sleep 2; done']
+      containers:
+        - name: migrations
+          image: ghcr.io/hcubasd/curly-spoon:0.1.2
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: POSTGRES_PASSWORD
+          args:
+            - "-path=/migrations"
+            - "-database=postgres://postgres:$(POSTGRES_PASSWORD)@db:5432/postgres?sslmode=disable"
+            - "up"
+      restartPolicy: Never
+  ttlSecondsAfterFinished: 60

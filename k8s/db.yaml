@@ -8,6 +8,8 @@ spec:
   ports:
     - port: 5432
   clusterIP: None
+  selector:
+    app.kubernetes.io/name: db
 ---
 apiVersion: apps/v1
 kind: StatefulSet
