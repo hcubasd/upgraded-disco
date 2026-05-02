@@ -29,9 +29,20 @@ kubectl wait job/migrations --for=condition=complete --timeout=120s
 Deployment is triggered by pushing a signed version tag:
 
 ```bash
-git tag -s v1.0.0 -m "v1.0.0"
+git tag -m "v1.0.0" v1.0.0
 git push origin v1.0.0
 ```
+
+Signing happens automatically — `tag.gpgsign = true` and `gpg.format = ssh` are set in the repo's git config.
+
+## Scripts
+
+Helper scripts for setting up a development environment on a new machine:
+
+- `scripts/config-git.sh` — configures git identity and SSH signing
+- `scripts/config-helix.sh` — configures the Helix editor
+- `scripts/install-kubectl.sh` — downloads and installs `kubectl`
+- `scripts/install-node.sh` — installs Node.js
 
 ### Prerequisites
 
