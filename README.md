@@ -39,10 +39,7 @@ Signing happens automatically — `tag.gpgsign = true` and `gpg.format = ssh` ar
 
 Helper scripts for setting up a development environment on a new machine:
 
-- `scripts/config-git.sh` — configures git identity and SSH signing
-- `scripts/config-helix.sh` — configures the Helix editor
-- `scripts/install-kubectl.sh` — downloads and installs `kubectl`
-- `scripts/install-node.sh` — installs Node.js
+- `scripts/config-helix.sh` — configures the Helix editor for this project's stack
 
 ### Prerequisites
 
