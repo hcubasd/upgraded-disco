@@ -2,5 +2,5 @@
 name = "yaml"
 
 [language-server.yaml-language-server.config.yaml.schemas]
-"kubernetes" = "k8s/**"
 "https://json.schemastore.org/github-workflow.json" = ".github/workflows/*.yaml"
+"kubernetes" = "k8s/**"

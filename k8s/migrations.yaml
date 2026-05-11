@@ -11,7 +11,7 @@ spec:
           command: ['sh', '-c', 'until pg_isready -h db -p 5432; do sleep 2; done']
       containers:
         - name: migrations
-          image: ghcr.io/hcubasd/curly-spoon:0.1.5
+          image: ghcr.io/hcubasd/curly-spoon:0.1.7
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
