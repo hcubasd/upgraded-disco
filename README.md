@@ -1,6 +1,6 @@
 # upgraded-disco
 
-Kubernetes infrastructure for the **modest-galois** project.
+Kubernetes infrastructure for **[mlclogistica.app](https://mlclogistica.app)**.
 
 ## Structure
 
