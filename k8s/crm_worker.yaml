@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: crm-worker
-              image: hcdouat/improved-doodle:1.0.0-rc.2
+              image: hcdouat/improved-doodle:1.0.0-rc.3
               command:
                 - /bin/sh
                 - -c
