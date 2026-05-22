@@ -9,6 +9,7 @@ Kubernetes infrastructure for **[mlclogistica.app](https://mlclogistica.app)**.
   - `migrations.yaml` — Job that runs database migrations using the `curly-spoon` image
   - `crm_worker.yaml` — CronJob that syncs deals from the CRM into the database every minute
   - `api.yaml` — Deployment and Service for the Go deals read API
+  - `oauth2-proxy.yaml` — Deployment and Service for Microsoft Entra ID authentication via OAuth2 Proxy
   - `secret.yaml` — dev credentials (not applied in production)
 
 ## Workflows
@@ -46,6 +47,21 @@ Helper scripts for setting up a development environment on a new machine:
 ### Prerequisites
 
 Production deployments require a `KUBECONFIG` secret set in the repository settings containing a valid kubeconfig for the target cluster. On a k3s VM, obtain it with:
+
+The `secret.yaml` must be applied manually to the cluster (it is excluded from the automated deployment). It requires the following keys:
+
+- `POSTGRES_PASSWORD` — Postgres password
+- `CRM_CLIENT_ID` / `CRM_CLIENT_SECRET` — CRM OAuth2 credentials
+- `OAUTH2_PROXY_OIDC_TENANT_ID` — Microsoft Entra ID Directory (tenant) ID
+- `OAUTH2_PROXY_CLIENT_ID` — Entra ID Application (client) ID
+- `OAUTH2_PROXY_CLIENT_SECRET` — Entra ID client secret value
+- `OAUTH2_PROXY_COOKIE_SECRET` — random 32-byte key, generate with `openssl rand -base64 32`
+
+To retrieve existing secret values from the cluster before updating:
+
+```bash
+kubectl get secret secret -o go-template='{{range $k,$v := .data}}{{$k}}: {{$v | base64decode}}{{"\n"}}{{end}}'
+```
 
 ```bash
 sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
