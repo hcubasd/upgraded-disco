@@ -8,8 +8,7 @@ spec:
   selector:
     app.kubernetes.io/name: oauth2-proxy
   ports:
-    - port: 80
-      targetPort: 4180
+    - port: 4180
 ---
 apiVersion: apps/v1
 kind: Deployment
