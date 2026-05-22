@@ -7,6 +7,8 @@ Kubernetes infrastructure for **[mlclogistica.app](https://mlclogistica.app)**.
 - `k8s/` — manifests applied to the cluster
   - `db.yaml` — Postgres StatefulSet and headless Service
   - `migrations.yaml` — Job that runs database migrations using the `curly-spoon` image
+  - `crm_worker.yaml` — CronJob that syncs deals from the CRM into the database every minute
+  - `api.yaml` — Deployment and Service for the Go deals read API
   - `secret.yaml` — dev credentials (not applied in production)
 
 ## Workflows
