@@ -9,7 +9,6 @@ spec:
     app.kubernetes.io/name: frontend
   ports:
     - port: 80
-      targetPort: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -29,5 +28,3 @@ spec:
       containers:
         - name: frontend
           image: ghcr.io/hcubasd/bookish-lamp:1.0.0-rc.3
-          ports:
-            - containerPort: 80

@@ -41,5 +41,3 @@ spec:
                 secretKeyRef:
                   name: secret
                   key: POSTGRES_PASSWORD
-          ports:
-            - containerPort: 8080

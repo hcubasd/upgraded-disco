@@ -34,7 +34,7 @@ spec:
             - --upstream=http://frontend
             - --http-address=0.0.0.0:4180
             - --redirect-url=https://dashboard.mlclogistica.app/oauth2/callback
-            - --email-domain=theirclient.com
+            - --email-domain=mlclogistica.com.br
           env:
             - name: OAUTH2_PROXY_OIDC_TENANT_ID
               valueFrom:
@@ -56,5 +56,3 @@ spec:
                 secretKeyRef:
                   name: secret
                   key: OAUTH2_PROXY_COOKIE_SECRET
-          ports:
-            - containerPort: 4180
