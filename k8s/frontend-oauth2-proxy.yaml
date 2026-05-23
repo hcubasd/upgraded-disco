@@ -29,8 +29,8 @@ spec:
         - name: oauth2-proxy
           image: quay.io/oauth2-proxy/oauth2-proxy:latest
           args:
-            - --provider=oidc
-            - --oidc-issuer-url=https://login.microsoftonline.com/common/v2.0
+            - --provider=azure
+            - --azure-tenant=common
             - --upstream=http://frontend
             - --http-address=0.0.0.0:4180
             - --redirect-url=https://dashboard.mlclogistica.app/oauth2/callback
