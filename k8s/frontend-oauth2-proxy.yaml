@@ -37,6 +37,7 @@ spec:
             - --http-address=0.0.0.0:4180
             - --redirect-url=https://dashboard.mlclogistica.app/oauth2/callback
             - --email-domain=mlclogistica.com.br
+            - --skip-provider-button=true
           env:
             - name: OAUTH2_PROXY_CLIENT_ID
               valueFrom:
