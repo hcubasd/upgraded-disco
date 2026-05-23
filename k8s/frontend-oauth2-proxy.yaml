@@ -30,17 +30,12 @@ spec:
           image: quay.io/oauth2-proxy/oauth2-proxy:latest
           args:
             - --provider=oidc
-            - --oidc-issuer-url=https://login.microsoftonline.com/$(OAUTH2_PROXY_OIDC_TENANT_ID)/v2.0
+            - --oidc-issuer-url=https://login.microsoftonline.com/common/v2.0
             - --upstream=http://frontend
             - --http-address=0.0.0.0:4180
             - --redirect-url=https://dashboard.mlclogistica.app/oauth2/callback
             - --email-domain=mlclogistica.com.br
           env:
-            - name: OAUTH2_PROXY_OIDC_TENANT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: secret
-                  key: OAUTH2_PROXY_OIDC_TENANT_ID
             - name: OAUTH2_PROXY_CLIENT_ID
               valueFrom:
                 secretKeyRef:
