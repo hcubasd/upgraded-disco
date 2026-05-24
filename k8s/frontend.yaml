@@ -27,4 +27,4 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/hcubasd/bookish-lamp:1.0.0-rc.3
+          image: ghcr.io/hcubasd/bookish-lamp:1.0.0-rc.4
