@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: hcdouat/glowing-umbrella:1.0.0-rc.1
+          image: hcdouat/glowing-umbrella:1.0.0-rc.2
           env:
             - name: PGHOST
               value: db
