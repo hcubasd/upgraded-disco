@@ -27,16 +27,16 @@ spec:
     spec:
       containers:
         - name: db
+          image: postgres:18
+          volumeMounts:
+            - name: db
+              mountPath: /var/lib/postgresql/18/docker
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: secret
                   key: POSTGRES_PASSWORD
-          image: postgres:18
-          volumeMounts:
-            - name: db
-              mountPath: /var/lib/postgresql/18/docker
   volumeClaimTemplates:
     - metadata:
         name: db
@@ -44,4 +44,4 @@ spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 1Gi
+            storage: 2Gi
