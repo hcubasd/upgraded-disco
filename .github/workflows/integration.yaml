@@ -11,4 +11,4 @@ jobs:
       - run: curl -sfL https://get.k3s.io | sh -
       - run: mkdir -p ~/.kube && sudo k3s kubectl config view --raw > ~/.kube/config && chmod 600 ~/.kube/config
       - run: kubectl wait node --for=condition=Ready --all --timeout=60s
-      - run: kubectl apply -f k8s/secret.yaml -f k8s/db.yaml -f k8s/migrations.yaml -f k8s/crm_worker.yaml
+      - run: kubectl apply -f k8s/secret.yaml -f k8s/db.yaml -f k8s/migrations.yaml -f k8s/crm_worker.yaml -f k8s/gateway.yaml -f k8s/api/
