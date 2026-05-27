@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: api
+spec:
+  parentRefs:
+    - name: traefik
+      sectionName: api
+      kind: Gateway
+  hostnames:
+    - "api.dashboard.mlclogistica.app"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: oauth2-proxy-api
+          port: 4180
