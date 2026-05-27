@@ -15,7 +15,7 @@ jobs:
           mkdir -p ~/.kube
           echo "${{secrets.KUBECONFIG}}" > ~/.kube/config
       - run: kubectl get nodes
-      - run: kubectl apply -f k8s/db.yaml -f k8s/migrations.yaml -f k8s/crm_worker.yaml -f k8s/gateway.yaml -f k8s/api/
+      - run: kubectl apply -Rf k8s/
       - uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true

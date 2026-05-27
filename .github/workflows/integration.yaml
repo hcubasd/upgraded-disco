@@ -13,4 +13,4 @@ jobs:
       - run: kubectl wait node --for=condition=Ready --all --timeout=60s
       - run: kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
       - run: kubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v3.7/docs/content/reference/dynamic-configuration/kubernetes-gateway-rbac.yml
-      - run: kubectl apply -f k8s/secret.yaml -f k8s/db.yaml -f k8s/migrations.yaml -f k8s/crm_worker.yaml -f k8s/gateway.yaml -f k8s/api/
+      - run: kubectl apply -Rf k8s/
