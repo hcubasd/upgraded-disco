@@ -32,6 +32,8 @@ spec:
           env:
             - name: PGHOST
               value: db
+            - name: PGPORT
+              value: "5432"
             - name: PGUSER
               value: postgres
             - name: PGDATABASE
