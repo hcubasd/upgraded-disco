@@ -39,7 +39,7 @@ spec:
             - --email-domain=mlclogistica.com.br
             - --skip-provider-button=true
             - --cookie-domain=.mlclogistica.app
-            - --cors-allowed-origins=https://dashboard.mlclogistica.app
+            - --skip-auth-preflight
           env:
             - name: OAUTH2_PROXY_CLIENT_ID
               valueFrom:
