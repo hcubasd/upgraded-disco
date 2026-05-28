@@ -8,7 +8,7 @@ spec:
       sectionName: api
       kind: Gateway
   hostnames:
-    - "api.dashboard.mlclogistica.app"
+    - "dashboard-api.mlclogistica.app"
   rules:
     - matches:
         - path:

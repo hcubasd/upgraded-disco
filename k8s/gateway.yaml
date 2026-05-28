@@ -15,7 +15,7 @@ spec:
     - name: api
       protocol: HTTP
       port: 8000
-      hostname: "api.dashboard.mlclogistica.app"
+      hostname: "dashboard-api.mlclogistica.app"
       allowedRoutes:
         namespaces:
           from: Same
