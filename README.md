@@ -1,6 +1,6 @@
 # upgraded-disco
 
-Kubernetes infrastructure for **[mlclogistica.app](https://mlclogistica.app)**.
+Kubernetes infrastructure for the **[mlclogistica.app](https://mlclogistica.app)** dashboard project.
 
 ## Structure
 
