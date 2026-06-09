@@ -17,7 +17,7 @@ k8s/
 │   └── oauth2-proxy.yaml — OAuth2 Proxy deployment protecting the frontend
 └── api/
     ├── deployment.yaml   — Deployment + Service for the Go deals API (glowing-umbrella image)
-    ├── http-route.yaml   — HTTPRoute: api.dashboard.mlclogistica.app → oauth2-proxy-api
+    ├── http-route.yaml   — HTTPRoute: dashboard-api.mlclogistica.app → oauth2-proxy-api
     └── oauth2-proxy.yaml — OAuth2 Proxy deployment protecting the API
 ```
 
@@ -26,7 +26,7 @@ k8s/
 | Service | Image | URL |
 |---|---|---|
 | Frontend | `ghcr.io/hcubasd/bookish-lamp` | `dashboard.mlclogistica.app` |
-| API | `hcdouat/glowing-umbrella` | `api.dashboard.mlclogistica.app` |
+| API | `hcdouat/glowing-umbrella` | `dashboard-api.mlclogistica.app` |
 | CRM Worker | `hcdouat/improved-doodle` | — (CronJob, every minute) |
 | Migrations | `ghcr.io/hcubasd/curly-spoon` | — (Job, runs on deploy) |
 | Database | `postgres:18` | `db:5432` (cluster-internal) |
