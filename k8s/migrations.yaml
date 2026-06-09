@@ -12,7 +12,7 @@ spec:
           command: ['sh', '-c', 'until pg_isready -h db -p 5432; do sleep 2; done']
       containers:
         - name: migrations
-          image: ghcr.io/hcubasd/curly-spoon:1.0.0-rc.4
+          image: ghcr.io/hcubasd/curly-spoon:1.0.0
           args:
             - "-path=/migrations"
             - "-database=postgres://postgres:$(POSTGRES_PASSWORD)@db:5432/postgres?sslmode=disable"
