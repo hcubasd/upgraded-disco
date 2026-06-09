@@ -15,5 +15,7 @@ jobs:
           mkdir -p ~/.kube
           echo "${{secrets.KUBECONFIG}}" > ~/.kube/config
       - run: kubectl get nodes
-      - run: kubectl apply -f k8s/
+      - run: kubectl apply -Rf k8s/
       - uses: softprops/action-gh-release@v3
+        with:
+          generate_release_notes: true
