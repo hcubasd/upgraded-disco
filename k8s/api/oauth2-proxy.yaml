@@ -17,6 +17,7 @@ metadata:
   labels:
     app.kubernetes.io/name: oauth2-proxy-api
 spec:
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: oauth2-proxy-api

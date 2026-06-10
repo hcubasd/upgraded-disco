@@ -16,6 +16,8 @@ jobs:
           echo "${{secrets.KUBECONFIG}}" > ~/.kube/config
       - run: kubectl get nodes
       - run: kubectl apply -Rf k8s/
+      - run: kubectl delete pods --field-selector=status.phase=Succeeded --ignore-not-found=true
+      - run: kubectl delete pods --field-selector=status.phase=Failed --ignore-not-found=true
       - uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
