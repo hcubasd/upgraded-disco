@@ -1,6 +1,6 @@
 # upgraded-disco
 
-Kubernetes infrastructure for the **[mlclogistica.app](https://mlclogistica.app)** dashboard project.
+Kubernetes infrastructure for a small, single-node k3s stack: a public-facing frontend and API sitting behind Traefik's Gateway API and OAuth2 Proxy, a background worker, and Postgres underneath.
 
 ## Structure
 
@@ -34,15 +34,47 @@ k8s/
 
 Both the frontend and API are protected by [OAuth2 Proxy](https://oauth2-proxy.github.io/oauth2-proxy/) using Microsoft Entra ID. Only `@mlclogistica.com.br` accounts are allowed through.
 
+## Cluster bootstrap
+
+A fresh node needs a few one-time steps before it can accept deploys. None of this re-runs automatically on every deploy — see [Workflows](#workflows) for what actually happens on each push/tag.
+
+1. **Install k3s**, pinning the TLS certificate's Subject Alternative Names to the node's external IP. Without this, `kubectl` from outside the VM — including CI/CD — can't validate the API server's certificate and every remote connection fails:
+
+   ```bash
+   curl -sfL https://get.k3s.io | sh -s - --tls-san <EXTERNAL_IP>
+   ```
+
+2. **Install the Gateway API CRDs and Traefik's Gateway RBAC.** These teach the cluster what a `Gateway`/`HTTPRoute` object even is, and grant Traefik permission to watch them. Kept as manual, documented steps rather than folded into CD — they pull from external URLs, and a transient fetch failure shouldn't be able to block a production deploy that has nothing to do with them:
+
+   ```bash
+   kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
+   kubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v3.7/docs/content/reference/dynamic-configuration/kubernetes-gateway-rbac.yml
+   ```
+
+3. **Apply the real secret** (see [Secret](#secret) below). `k8s/secret.yaml` is a dev-only placeholder — it is never what actually gets applied to a real cluster, so this step can't be skipped in favor of just applying `k8s/` wholesale:
+
+   ```bash
+   kubectl apply -f <your-real-secret.yaml>
+   ```
+
+4. **Push a version tag.** From here, CD takes over — see [Workflows](#workflows) below.
+
+To pull the kubeconfig off the node itself (e.g. for local access, or to populate the `KUBECONFIG` GitHub secret — remember to point its `server:` field at the external IP, not `127.0.0.1`):
+
+```bash
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+sudo chown $USER ~/.kube/config
+```
+
 ## Workflows
 
-**Integration** (`integration.yaml`) — runs on every branch push. Spins up a local k3s cluster, installs Gateway API CRDs and Traefik RBAC, applies all manifests recursively, and verifies the cluster accepts them.
+**Integration** (`integration.yaml`) — runs on every branch push. Spins up a throwaway local k3s cluster, runs the same CRD/RBAC bootstrap steps as above, applies all of `k8s/` including the dev placeholder secret (fine here, since this cluster is disposable), and verifies the cluster accepts every manifest. This only proves the YAML is valid and gets accepted by the API server — it does not wait for pods to become healthy or exercise any real traffic.
 
-**Deployment** (`deployment.yaml`) — runs on version tags (`v*.*.*`). Removes `secret.yaml`, applies all manifests to the production cluster via `KUBECONFIG` secret, then publishes a GitHub Release with auto-generated notes.
+**Deployment** (`deployment.yaml`) — runs on version tags (`v*.*.*`), against the real cluster via the `KUBECONFIG` secret. Removes `k8s/secret.yaml` before applying, so the placeholder never touches production (the real secret is expected to already exist from the bootstrap step above), applies everything else in `k8s/`, prunes leftover `Succeeded` and `Failed` pods from the previous deploy, then publishes a GitHub Release with auto-generated notes.
 
 ## Secret
 
-`secret.yaml` is a placeholder for local development only — it is deleted before production apply. The following keys must exist in the cluster `secret` object:
+`k8s/secret.yaml` is a placeholder for local development only — it is deleted before every production apply and is never the source of real credentials. The following keys must exist in the cluster's `secret` object:
 
 | Key | Description |
 |---|---|
@@ -53,11 +85,13 @@ Both the frontend and API are protected by [OAuth2 Proxy](https://oauth2-proxy.g
 | `OAUTH2_PROXY_CLIENT_SECRET` | Entra ID client secret value |
 | `OAUTH2_PROXY_COOKIE_SECRET` | Random 32-byte key — `openssl rand -base64 32` |
 
-To read existing secret values from the cluster:
+To read an existing value (e.g. when migrating to a new cluster):
 
 ```bash
-kubectl get secret secret -o go-template='{{range $k,$v := .data}}{{$k}}: {{$v | base64decode}}{{"\n"}}{{end}}'
+kubectl get secret secret -o jsonpath='{.data.KEY_NAME}' | base64 -d
 ```
+
+**A note on encoding, learned the hard way:** when writing a value into a secret, use `stringData` with the plain value — not `data`, which expects an already-base64-encoded string. Kubernetes does not double-decode. Pasting an already-encoded value (say, copied straight from a `data` field, or from `kubectl get secret -o yaml`) into a `stringData` field, or into `--from-literal`, silently encodes it *again*. The apply succeeds without error and the secret looks fine — every consumer of that credential then fails downstream, in ways that rarely point back at encoding at all.
 
 ## Releases
 
@@ -69,18 +103,3 @@ git push origin v1.0.0
 ```
 
 Signing is configured automatically — `tag.gpgsign = true` and `gpg.format = ssh` are set in the repo's git config.
-
-## Local apply
-
-```bash
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
-kubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v3.7/docs/content/reference/dynamic-configuration/kubernetes-gateway-rbac.yml
-kubectl apply -Rf k8s/
-```
-
-To get the kubeconfig from a k3s node:
-
-```bash
-sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-sudo chown $USER ~/.kube/config
-```
