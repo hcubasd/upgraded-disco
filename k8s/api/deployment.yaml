@@ -19,8 +19,6 @@ metadata:
     app.kubernetes.io/name: api
 spec:
   revisionHistoryLimit: 2
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: api
