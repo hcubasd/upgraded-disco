@@ -6,11 +6,12 @@ Kubernetes infrastructure for the **[mlclogistica.app](https://mlclogistica.app)
 
 ```
 k8s/
-├── gateway.yaml          — Traefik Gateway (HTTP, two listeners: dashboard + api subdomains)
-├── db.yaml               — Postgres 18 StatefulSet + headless Service (2 Gi PVC)
-├── migrations.yaml       — Job that runs schema migrations (curly-spoon image, golang-migrate)
-├── crm_worker.yaml       — CronJob that syncs deals from the CRM every minute (improved-doodle image)
-├── secret.yaml           — dev credentials placeholder (never applied in production)
+├── gateway.yaml                 — Traefik Gateway (HTTP, two listeners: dashboard + api subdomains)
+├── traefik-gateway-config.yaml  — HelmChartConfig enabling Gateway API support in k3s's bundled Traefik
+├── db.yaml                      — Postgres 18 StatefulSet + headless Service (2 Gi PVC)
+├── migrations.yaml              — Job that runs schema migrations (curly-spoon image, golang-migrate)
+├── crm_worker.yaml              — CronJob that syncs deals from the CRM every minute (improved-doodle image)
+├── secret.yaml                  — dev credentials placeholder (never applied in production)
 ├── frontend/
 │   ├── deployment.yaml   — Deployment + Service for the React dashboard (bookish-lamp image)
 │   ├── http-route.yaml   — HTTPRoute: dashboard.mlclogistica.app → oauth2-proxy-frontend
